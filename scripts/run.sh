@@ -1,5 +1,6 @@
 # Try to fetch if there are differences
-if git diff-index --quiet HEAD --; then
+git fetch -p
+if [ $(git diff --name-only origin/master | wc -l) -eq "0" ]; then
   echo "  🟢 Git repo is clean."
 else
   echo "  🔴 Git repo dirty. Quit."
