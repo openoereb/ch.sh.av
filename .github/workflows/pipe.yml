@@ -32,7 +32,7 @@ jobs:
         ls -ls /tmp/$FILE_NAME
     - name: Unzip AV
       run: |
-        unzip /tmp/$FILE_NAME '*.itf' -d ./      
+        unzip /tmp/$FILE_NAME '*.itf' -o -d ./
     - name: Commit changes
       run: |
         git add .
@@ -40,5 +40,3 @@ jobs:
         git config --global user.name "${{ secrets.GIT_NAME }}"
         git commit . -m 'update AV on $(date --iso-8601=seconds) from $DOWNLOAD_URL/$FILE_NAME'
         git push
-    
-    
