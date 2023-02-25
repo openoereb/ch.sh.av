@@ -32,7 +32,7 @@ jobs:
         ls -ls /tmp/$FILE_NAME
     - name: Unzip AV
       run: |
-        unzip /tmp/$FILE_NAME '*.itf' -o -d ./
+        unzip -o /tmp/$FILE_NAME '*.itf' -d ./
     - name: Commit changes
       run: |
         git add .
