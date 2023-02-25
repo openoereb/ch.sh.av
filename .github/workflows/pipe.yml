@@ -12,6 +12,10 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      DOWNLOAD_URL: https://www.geodienste.ch/downloads/interlis/av/SH
+      FILE_NAME: av_SH_lv95.zip
+
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -23,6 +27,16 @@ jobs:
     # Download current AV state
     - name: Download AV
       run: |
-        curl -X GET https://www.geodienste.ch/downloads/interlis/av/SH/av_SH_lv95.zip > /tmp/av_SH_lv95.zip
+        curl -X GET -o /tmp/av_SH_lv95.zip $DOWNLOAD_URL/$FILE_NAME
+        ls -ls /tmp/$FILE_NAME
+    - name: Unzip AV
+      run: |
+        unzip /tmp/$FILE_NAME '*.itf' -d ./
+    - name: Add AV to GIT
+      run: |
+        git add .
+    - name: Commit changes
+      run: |
+        git commit . -m 'update AV on $(date --iso-8601=seconds) from $DOWNLOAD_URL/$FILE_NAME'
     
     
