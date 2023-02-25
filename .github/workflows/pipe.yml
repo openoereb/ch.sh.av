@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   sync:
-    name: 'Submodules Sync'
+    name: 'AV Sync'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
