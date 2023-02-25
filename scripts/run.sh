@@ -1,4 +1,4 @@
-if [ $(git status --porcelain | wc -l) -eq "0" ]; then
+if git diff-index --quiet HEAD --; then
   echo "  🟢 Git repo is clean."
 else
   echo "  🔴 Git repo dirty. Quit."
