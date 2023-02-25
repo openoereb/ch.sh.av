@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   sync:
+    environment: sync
     name: 'AV Sync'
     runs-on: ubuntu-latest
 
