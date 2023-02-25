@@ -38,5 +38,4 @@ jobs:
         git add .
         git config --global user.email "${{ secrets.GIT_EMAIL }}"
         git config --global user.name "${{ secrets.GIT_NAME }}"
-        git commit . -m 'update AV on $(date --iso-8601=seconds) from $DOWNLOAD_URL/$FILE_NAME'
-        git push
+        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME ./scripts/commit_push_if_dirty.sh
