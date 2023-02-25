@@ -4,3 +4,4 @@ else
   echo "  🔴 Git repo dirty. Quit."
   exit 1
 fi
+
