@@ -31,16 +31,13 @@ jobs:
         ls -ls /tmp/$FILE_NAME
     - name: Unzip AV
       run: |
-        unzip /tmp/$FILE_NAME '*.itf' -d ./
-    - name: Add AV to GIT
-      run: |
-        git add .
-    - name: Set git attributes
-      run: |
-        git config --global user.email "${{ secrets.GIT_EMAIL }}"
-        git config --global user.name "${{ secrets.GIT_NAME }}"
+        unzip /tmp/$FILE_NAME '*.itf' -d ./      
     - name: Commit changes
       run: |
+        git add .
+        git config --global user.email "${{ secrets.GIT_EMAIL }}"
+        git config --global user.name "${{ secrets.GIT_NAME }}"
         git commit . -m 'update AV on $(date --iso-8601=seconds) from $DOWNLOAD_URL/$FILE_NAME'
+        git push origin/master
     
     
