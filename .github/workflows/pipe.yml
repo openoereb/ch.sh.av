@@ -16,3 +16,13 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
+    # Update references
+    - name: Git checkout master
+      run: |
+        git checkout master
+    # Download current AV state
+    - name: Download AV
+      run: |
+        curl -X GET https://www.geodienste.ch/downloads/interlis/av/SH/av_SH_lv95.zip > /tmp/av_SH_lv95.zip
+    
+    
