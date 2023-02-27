@@ -3,6 +3,13 @@ name: 'AV Sync'
 on:
   # Allows you to run this workflow manually from the Actions tab or through HTTP API
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Full Update'     
+        required: true
+        default: false
+      tags:
+        description: 'If all municiaplities should be rebuild'
 jobs:
   sync:
     environment: sync
@@ -16,6 +23,23 @@ jobs:
     env:
       DOWNLOAD_URL: https://www.geodienste.ch/downloads/interlis/av/SH
       FILE_NAME: av_SH_lv95.zip
+      POSTGRES_PW: postgres
+      
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: ghcr.io/oereb/oereb-db:2
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: $POSTGRES_PW
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -38,4 +62,4 @@ jobs:
         git add .
         git config --global user.email "${{ secrets.GIT_EMAIL }}"
         git config --global user.name "${{ secrets.GIT_NAME }}"
-        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME ./scripts/commit_push_if_dirty.sh
+        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME FULL_REBUILD=${{ github.event.inputs.logLevel }} ./scripts/commit_push_if_dirty.sh
