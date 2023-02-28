@@ -42,4 +42,4 @@ jobs:
         git add .
         git config --global user.email "${{ secrets.GIT_EMAIL }}"
         git config --global user.name "${{ secrets.GIT_NAME }}"
-        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME FULL_REBUILD=${{ github.event.inputs.logLevel }} ./scripts/commit_push_if_dirty.sh
+        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} POSTGRES_DB=${{ secrets.POSTGRES_DB }} PG_READ_PWD=${{ secrets.PG_READ_PWD }} PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} ./scripts/commit_push_if_dirty.sh
