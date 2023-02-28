@@ -18,4 +18,3 @@ done
 docker cp ./scripts/insert_data.sh $CONTAINERNAME:/usr/bin
 docker exec -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB $CONTAINERNAME ./usr/bin/insert_data.sh
 docker commit $CONTAINERNAME ghcr.io/$GITHUB_REPOSITORY:latest
-docker push ghcr.io/$GITHUB_REPOSITORY:latest
