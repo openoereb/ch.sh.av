@@ -24,7 +24,6 @@ jobs:
     env:
       DOWNLOAD_URL: https://www.geodienste.ch/downloads/interlis/av/SH
       FILE_NAME: av_SH_lv95.zip
-      POSTGRES_PW: postgres
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -72,7 +71,7 @@ jobs:
             sleep 5
           done
           docker cp ./scripts/insert_data.sh $CONTAINERNAME:/usr/bin
-          docker exec $CONTAINERNAME bash /usr/bin/insert_data.sh
+          docker exec $CONTAINERNAME POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} POSTGRES_DB=${{ secrets.POSTGRES_DB }} ./usr/bin/insert_data.sh
           docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
         fi
