@@ -4,6 +4,8 @@ on:
   schedule:
     # this is in UTC so it means every day at 3 AM this trigger is pulled
     - cron: 0 2 * * *
+  workflow_dispatch:
+    
 jobs:
   sync:
     environment: sync
