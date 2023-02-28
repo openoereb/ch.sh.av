@@ -1,5 +1,6 @@
 # Try to fetch if there are differences
 TIMESTAMP=$(date --iso-8601=seconds)
+CONTAINERNAME="database"
 git fetch -p
 # bool if remote changes
 if [ $(git diff --name-only origin/master | wc -l) -eq "0" ]; then
@@ -10,9 +11,9 @@ else
   git push
 fi
 
-docker run --name oerebdb-sh -d --rm --name oerebdb -v $(pwd):/data -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=$PG_READ_PWD -e PG_WRITE_PWD=$PG_WRITE_PWD -e PG_GRETL_PWD=$PG_GRETL_PWD sogis/oereb-db:2
-until docker exec oerebdb-sh pg_isready; do
-  echo "oerebdb was not ready, waiting another cycle"
+docker run --name $CONTAINERNAME -d --rm -v $(pwd):/data -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=$PG_READ_PWD -e PG_WRITE_PWD=$PG_WRITE_PWD -e PG_GRETL_PWD=$PG_GRETL_PWD sogis/oereb-db:2
+until docker exec $CONTAINERNAME pg_isready; do
+  echo "$CONTAINERNAME was not ready, waiting another cycle"
   sleep 5
 done
-docker exec oerebdb-sh ls -ls /data
+docker exec $CONTAINERNAME ls -ls /data
