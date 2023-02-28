@@ -65,8 +65,8 @@ jobs:
           git commit . -m "update AV on $TIMESTAMP from $DOWNLOAD_URL/$FILE_NAME"
           git push
         fi
-        if [ $($CHANGES | wc -l) != "0" ] || [ "$DOCKERBUILD" = "YES" ]; then
-          docker run --name $CONTAINERNAME -d -v $(pwd):/data -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=$PG_READ_PWD -e PG_WRITE_PWD=$PG_WRITE_PWD -e PG_GRETL_PWD=$PG_GRETL_PWD ghcr.io/openoereb/oereb-db-structure:latest
+        if [ $($CHANGES | wc -l) != "0" ] || [ "${{ inputs.dockerbuild }}" = "YES" ]; then
+          docker run --name $CONTAINERNAME -d -v $(pwd):/data -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=${{ secrets.PG_READ_PWD }} -e PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} -e PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} ghcr.io/openoereb/oereb-db-structure:latest
           until docker exec $CONTAINERNAME pg_isready; do
             echo "$CONTAINERNAME was not ready, waiting another cycle"
             sleep 5
@@ -76,4 +76,3 @@ jobs:
           docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
         fi
-        DOWNLOAD_URL=$DOWNLOAD_URL FILE_NAME=$FILE_NAME POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} POSTGRES_DB=${{ secrets.POSTGRES_DB }} PG_READ_PWD=${{ secrets.PG_READ_PWD }} PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} DOCKERBUILD=${{ inputs.dockerbuild }} ./scripts/commit_push_if_dirty.sh
