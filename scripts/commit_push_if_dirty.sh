@@ -10,14 +10,12 @@ else
   git commit . -m "update AV on $TIMESTAMP from $DOWNLOAD_URL/$FILE_NAME"
   git push
 fi
-if [ $($CHANGES | wc -l) != "0" ] || [ "DOCKERBUILD" = "YES" ]; then
-  docker run --name $CONTAINERNAME -d -v $(pwd):/data -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=$PG_READ_PWD -e PG_WRITE_PWD=$PG_WRITE_PWD -e PG_GRETL_PWD=$PG_GRETL_PWD ghcr.io/openoereb/oereb-db-structure:latest
-  until docker exec $CONTAINERNAME pg_isready; do
-    echo "$CONTAINERNAME was not ready, waiting another cycle"
-    sleep 5
-  done
-  docker cp ./scripts/insert_data.sh $CONTAINERNAME:/usr/bin
-  docker exec $CONTAINERNAME POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_DB=$POSTGRES_DB ./usr/bin/insert_data.sh
-  docker commit $CONTAINERNAME ghcr.io/$GITHUB_REPOSITORY:latest
-  docker push ghcr.io/$GITHUB_REPOSITORY:latest
-fi
+docker run --name $CONTAINERNAME -d -v $(pwd):/data -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=$PG_READ_PWD -e PG_WRITE_PWD=$PG_WRITE_PWD -e PG_GRETL_PWD=$PG_GRETL_PWD ghcr.io/openoereb/oereb-db-structure:latest
+until docker exec $CONTAINERNAME pg_isready; do
+  echo "$CONTAINERNAME was not ready, waiting another cycle"
+  sleep 5
+done
+docker cp ./scripts/insert_data.sh $CONTAINERNAME:/usr/bin
+docker exec $CONTAINERNAME POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_DB=$POSTGRES_DB ./usr/bin/insert_data.sh
+docker commit $CONTAINERNAME ghcr.io/$GITHUB_REPOSITORY:latest
+docker push ghcr.io/$GITHUB_REPOSITORY:latest
