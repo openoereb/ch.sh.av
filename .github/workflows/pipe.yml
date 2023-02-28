@@ -1,15 +1,9 @@
 name: 'AV Sync'
 
 on:
-  # Allows you to run this workflow manually from the Actions tab or through HTTP API
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Full Update'     
-        required: true
-        default: false
-      tags:
-        description: 'If all municiaplities should be rebuild'
+  schedule:
+    # this is in UTC so it means every day at 3 AM this trigger is pulled
+    - cron: 0 2 * * *
 jobs:
   sync:
     environment: sync
@@ -24,22 +18,6 @@ jobs:
       DOWNLOAD_URL: https://www.geodienste.ch/downloads/interlis/av/SH
       FILE_NAME: av_SH_lv95.zip
       POSTGRES_PW: postgres
-      
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: ghcr.io/oereb/oereb-db:2
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: $POSTGRES_PW
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
     # Checkout the repository to the GitHub Actions runner
