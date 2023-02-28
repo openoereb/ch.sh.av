@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+#    defaults:
+#      run:
+#        shell: bash
     env:
       DOWNLOAD_URL: https://www.geodienste.ch/downloads/interlis/av/SH
       FILE_NAME: av_SH_lv95.zip
