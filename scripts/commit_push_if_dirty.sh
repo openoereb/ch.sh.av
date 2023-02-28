@@ -16,6 +16,6 @@ until docker exec $CONTAINERNAME pg_isready; do
   sleep 5
 done
 docker cp ./scripts/insert_data.sh $CONTAINERNAME:/usr/bin
-docker exec $CONTAINERNAME POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_DB=$POSTGRES_DB ./usr/bin/insert_data.sh
+docker exec -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB $CONTAINERNAME ./usr/bin/insert_data.sh
 docker commit $CONTAINERNAME ghcr.io/$GITHUB_REPOSITORY:latest
 docker push ghcr.io/$GITHUB_REPOSITORY:latest
